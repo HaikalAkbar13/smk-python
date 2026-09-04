@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hands-on Practice Arena - SMK Negeri 1 Bantaeng</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              dark: '#060913',
+              sidebar: '#090e1c',
+              card: '#0d1426',
+              cyan: '#00f0ff',
+              emerald: '#10b981',
+              purple: '#a855f7',
+              yellow: '#facc15',
+              rose: '#f43f5e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Skulpt: In-Browser Python 3 Client-Side Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="practice.css">
+</head>
+<body class="bg-[#060913] text-slate-100 antialiased h-screen w-screen flex flex-col overflow-hidden">
+
+  <!-- ========================================================================= -->
+  <!-- TOP NAVBAR                                                                -->
+  <!-- ========================================================================= -->
+  <header class="h-14 bg-[#090e1c] border-b border-slate-800/80 px-4 flex items-center justify-between shrink-0 z-20">
+    
+    <!-- Left: Brand & Return to Presentation -->
+    <div class="flex items-center gap-3">
+      <a href="index.html" title="Kembali ke Slide Materi"
+        class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/80 text-xs font-semibold text-slate-300 hover:text-cyan-400 transition-all">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span class="hidden sm:inline">Slide Materi</span>
+      </a>
+
+      <div class="h-5 w-px bg-slate-800"></div>
+
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-emerald-400 p-0.5 shadow-sm">
+          <div class="w-full h-full bg-slate-950 rounded-[6px] flex items-center justify-center">
+            <i data-lucide="terminal" class="w-4 h-4 text-cyan-400"></i>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-sm tracking-wide bg-gradient-to-r from-cyan-400 via-emerald-300 to-yellow-300 bg-clip-text text-transparent">
+              SMK NEGERI 1 BANTAENG
+            </span>
+            <span class="hidden md:inline-block px-2 py-0.5 text-[9px] font-black rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+              PRACTICE ARENA
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center: User Rank & XP Indicator -->
+    <div class="hidden lg:flex items-center gap-4 px-4 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800">
+      <div class="flex items-center gap-2">
+        <i data-lucide="award" class="w-4 h-4 text-yellow-400"></i>
+        <span id="user-rank-display" class="text-xs font-semibold text-slate-300">Level 1: Novice Cadet 🐣</span>
+      </div>
+      <div class="w-32 h-2 bg-slate-800 rounded-full overflow-hidden">
+        <div id="overall-progress-bar" class="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 w-[0%] transition-all duration-300"></div>
+      </div>
+      <span id="user-xp-display" class="font-mono text-xs font-bold text-yellow-400">0 XP</span>
+    </div>
+
+    <!-- Right: Utility Controls (Cheat Sheet, Sound, Docs) -->
+    <div class="flex items-center gap-2">
+      <!-- Cheat Sheet Button -->
+      <button onclick="toggleCheatsheetDrawer()" 
+        class="px-3 py-1.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/40 text-xs font-bold text-cyan-300 flex items-center gap-1.5 transition-all shadow-sm">
+        <i data-lucide="book-open" class="w-4 h-4 text-cyan-400"></i>
+        <span>Contekan Sintaks</span>
+      </button>
+
+      <!-- Sound Toggle -->
+      <button id="btn-sound-toggle" onclick="toggleSound()" title="Toggle Suara"
+        class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 flex items-center justify-center text-slate-400 hover:text-cyan-400 transition-all">
+        <i data-lucide="volume-2" class="w-4 h-4 text-cyan-400"></i>
+      </button>
+    </div>
+
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN 3-PANEL IDE WORKSPACE                                                -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 flex overflow-hidden min-h-0">
+    
+    <!-- --------------------------------------------------------------------- -->
+    <!-- LEFT PANEL: 9 MISI SIDEBAR                                            -->
+    <!-- --------------------------------------------------------------------- -->
+    <aside class="w-80 bg-[#090e1c] border-r border-slate-800/80 flex flex-col shrink-0 overflow-hidden">
+      
+      <!-- User Quick Status Card -->
+      <div class="p-4 border-b border-slate-800/80 bg-slate-950/40 shrink-0">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-cyan-400"></i> Jalur Misi (9 Level)
+          </span>
+          <span id="completed-count-display" class="text-[11px] font-mono text-cyan-400 font-bold">
+            0 / 9 Selesai
+          </span>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-tight">
+          Selesaikan seluruh misi untuk menamatkan ujian puncak <b>Capstone Project</b>!
+        </p>
+      </div>
+
+      <!-- Missions Scrollable List -->
+      <div id="missions-list-container" class="flex-1 p-3 space-y-2 overflow-y-auto">
+        <!-- Rendered dynamically by practice.js -->
+      </div>
+
+    </aside>
+
+    <!-- --------------------------------------------------------------------- -->
+    <!-- MIDDLE PANEL: MISSION INSTRUCTIONS & CODE EDITOR                      -->
+    <!-- --------------------------------------------------------------------- -->
+    <section class="flex-1 flex flex-col border-r border-slate-800/80 min-w-0 bg-[#080c18] overflow-hidden">
+      
+      <!-- Mission Brief Header & Mode Selector -->
+      <div class="p-4 bg-slate-900/60 border-b border-slate-800/80 shrink-0 space-y-3">
+        
+        <!-- Header Row -->
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span id="active-mission-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                Misi 1 • Dasar
+              </span>
+              <span id="active-mission-concept" class="text-xs font-mono text-cyan-300">
+                Fokus: print()
+              </span>
+            </div>
+            <h2 id="active-mission-title" class="text-base sm:text-lg font-bold text-slate-100 leading-tight">
+              Broadcast Pesan Selamat Datang Lab Komputer
+            </h2>
+          </div>
+
+          <!-- Dual Code Mode Selector (Template vs Dari Nol) -->
+          <div class="flex items-center p-1 bg-slate-950 rounded-xl border border-slate-800 shrink-0">
+            <button id="btn-mode-template" onclick="setCodeMode('template')" title="Mode Bimbingan dengan template kode awal"
+              class="mode-pill px-3 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+              <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+              <span>Pakai Template</span>
+            </button>
+            <button id="btn-mode-blank" onclick="setCodeMode('blank')" title="Mode Mandiri: Menulis kode dari awal (Blank Canvas)"
+              class="mode-pill active px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5">
+              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+              <span>Ketik Dari Nol</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Description & Objective -->
+        <div class="p-3 rounded-2xl bg-slate-950/70 border border-slate-800/80 text-xs space-y-2">
+          <p id="active-mission-desc" class="text-slate-300 leading-relaxed">
+            Instruksi misi...
+          </p>
+          
+          <div class="pt-2 border-t border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-2">
+            <div>
+              <span class="font-bold text-cyan-400">Target Spesifikasi:</span>
+              <ul id="active-mission-specs" class="space-y-1 mt-1">
+                <!-- Specifications dynamically rendered -->
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Editor Toolbar -->
+      <div class="h-10 px-4 bg-[#090e1c] border-b border-slate-800 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+          <span class="ml-2 text-xs font-mono text-slate-400 flex items-center gap-1">
+            <i data-lucide="file-code" class="w-3.5 h-3.5 text-cyan-400"></i> main.py
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="resetCurrentCode()" title="Reset Editor ke Kode Awal"
+            class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-slate-300 flex items-center gap-1 transition-all">
+            <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Reset
+          </button>
+          <button onclick="downloadCurrentCode()" title="Unduh Script .py ke Komputer"
+            class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-slate-300 flex items-center gap-1 transition-all">
+            <i data-lucide="download" class="w-3 h-3"></i> Simpan .py
+          </button>
+        </div>
+      </div>
+
+      <!-- Code Editor Textarea Area -->
+      <div class="flex-1 flex overflow-hidden bg-[#080c18]">
+        <div id="line-numbers" class="line-numbers-col w-12 py-3 text-right pr-3 select-none shrink-0">
+          <!-- Line numbers -->
+        </div>
+        <textarea id="code-editor" spellcheck="false" 
+          class="code-editor-area flex-1 p-3 w-full h-full border-none focus:ring-0"
+          oninput="updateLineNumbers()"></textarea>
+      </div>
+
+      <!-- Bottom Action Bar (Run & Test Buttons) -->
+      <div class="h-14 px-4 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between shrink-0">
+        <div class="text-[11px] font-mono text-slate-500">
+          💡 Tips: Tekan <kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">Uji Tantangan</kbd> untuk verifikasi otomatis.
+        </div>
+
+        <div class="flex items-center gap-3">
+          <!-- Run Only Button -->
+          <button id="btn-run-code" onclick="runCodeOnly()" 
+            class="btn-arcade px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs flex items-center gap-1.5 transition-all">
+            <i data-lucide="play" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <span>Jalankan Saja</span>
+          </button>
+
+          <!-- Automated Test Runner Button -->
+          <button id="btn-test-code" onclick="runTestSuite()" 
+            class="btn-arcade px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-yellow-300 text-slate-950 font-black text-xs flex items-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+            <i data-lucide="check-circle" class="w-4 h-4 text-slate-950"></i>
+            <span>Uji Tantangan (Run Tests)</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- --------------------------------------------------------------------- -->
+    <!-- RIGHT PANEL: TERMINAL & AUTOMATED TEST RESULTS                        -->
+    <!-- --------------------------------------------------------------------- -->
+    <section class="w-96 bg-[#030712] flex flex-col shrink-0 overflow-hidden">
+      
+      <!-- Tabs Navigation -->
+      <div class="h-10 bg-slate-950 border-b border-slate-800 px-2 flex items-center justify-between shrink-0">
+        <div class="flex items-center">
+          <button id="btn-tab-terminal" onclick="switchRightTab('terminal')"
+            class="px-3.5 py-2 text-xs font-bold border-b-2 border-cyan-400 text-cyan-300 flex items-center gap-1.5 transition-all">
+            <i data-lucide="terminal" class="w-3.5 h-3.5"></i> Terminal
+          </button>
+          <button id="btn-tab-tests" onclick="switchRightTab('tests')"
+            class="px-3.5 py-2 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-1.5 transition-all">
+            <i data-lucide="check-square" class="w-3.5 h-3.5"></i> Hasil Pengujian
+          </button>
+          <button id="btn-tab-hints" onclick="switchRightTab('hints')"
+            class="px-3.5 py-2 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-1.5 transition-all">
+            <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i> Petunjuk
+          </button>
+        </div>
+
+        <button onclick="clearTerminal()" class="text-[10px] font-mono text-slate-500 hover:text-slate-300 mr-2">
+          Bersihkan
+        </button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
+        
+        <!-- TAB 1: TERMINAL CONSOLE -->
+        <div id="tab-pane-terminal" class="flex-1 flex flex-col justify-between overflow-hidden p-3 font-mono text-xs">
+          <div id="terminal-scroll-area" class="flex-1 overflow-y-auto space-y-1 pr-1">
+            <div id="terminal-output" class="space-y-1">
+              <!-- Python stdout rendered here -->
+            </div>
+          </div>
+
+          <!-- Interactive User Input Field -->
+          <div id="terminal-interactive-input" class="hidden mt-2 pt-2 border-t border-slate-800 flex items-center gap-2">
+            <span id="terminal-prompt-label" class="text-cyan-400 font-bold">></span>
+            <input id="terminal-user-input" type="text"
+              class="flex-1 bg-transparent text-yellow-300 text-xs focus:outline-none border-b border-cyan-400/50 pb-0.5 font-mono"
+              placeholder="Ketik jawabanmu lalu Enter...">
+            <span class="text-[10px] text-slate-500">Enter ↵</span>
+          </div>
+        </div>
+
+        <!-- TAB 2: AUTOMATED TEST REPORT -->
+        <div id="tab-pane-tests" class="hidden flex-1 p-4 overflow-y-auto">
+          <div id="test-report-container">
+            <!-- Rendered by practice.js -->
+          </div>
+        </div>
+
+        <!-- TAB 3: HINTS & SOLUTION -->
+        <div id="tab-pane-hints" class="hidden flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+          <div class="p-3.5 rounded-2xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-200 space-y-2">
+            <div class="font-bold flex items-center gap-1.5 text-yellow-300">
+              <i data-lucide="lightbulb" class="w-4 h-4"></i> Bantuan Misi:
+            </div>
+            <p id="active-mission-hint" class="leading-relaxed">
+              Petunjuk pengerjaan akan tampil di sini.
+            </p>
+          </div>
+          
+          <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 space-y-2">
+            <div class="font-bold text-slate-200">Tips Koding Mandiri:</div>
+            <ul class="space-y-1 text-[11px] text-slate-400 list-disc list-inside">
+              <li>Perhatikan huruf besar dan kecil (Python bersifat case-sensitive).</li>
+              <li>Pastikan setiap string dibungkus dengan tanda kutip pembuka dan penutup.</li>
+              <li>Periksa indentasi (spasi menjorok) saat menggunakan <code>if</code> atau <code>for</code>.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE-OUT CHEAT SHEET DRAWER                                              -->
+  <!-- ========================================================================= -->
+  <aside id="cheatsheet-drawer" class="closed fixed top-0 right-0 w-96 h-full bg-[#090e1c] border-l border-slate-800 z-50 flex flex-col">
+    <div class="h-14 px-5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-950">
+      <h3 class="text-sm font-bold text-cyan-300 flex items-center gap-2">
+        <i data-lucide="book-open" class="w-4 h-4 text-cyan-400"></i>
+        Contekan Sintaks Python Cepat
+      </h3>
+      <button onclick="toggleCheatsheetDrawer()" class="text-slate-400 hover:text-slate-200">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <div class="flex-1 p-5 overflow-y-auto space-y-4 text-xs">
+      
+      <!-- 1. Print -->
+      <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-cyan-400 font-mono">1. print() - Menampilkan Teks</span>
+          <button onclick="copySnippetToClipboard('print(\x22Halo SMK!\x22)')" class="text-[10px] text-slate-400 hover:text-cyan-300">Salin</button>
+        </div>
+        <div class="p-2 bg-slate-950 rounded-xl font-mono text-slate-300">
+          print("Halo SMK Bantaeng!")
+        </div>
+      </div>
+
+      <!-- 2. Variabel -->
+      <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-purple-400 font-mono">2. Variabel & Angka</span>
+          <button onclick="copySnippetToClipboard('nama = \x22Mikrotik\x22\nport = 22')" class="text-[10px] text-slate-400 hover:text-purple-300">Salin</button>
+        </div>
+        <div class="p-2 bg-slate-950 rounded-xl font-mono text-slate-300">
+          nama = "MikroTik"<br>
+          port = 22
+        </div>
+      </div>
+
+      <!-- 3. Input -->
+      <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-yellow-400 font-mono">3. input() - Meminta Jawaban</span>
+          <button onclick="copySnippetToClipboard('nama = input(\x22Siapa namamu? \x22)')" class="text-[10px] text-slate-400 hover:text-yellow-300">Salin</button>
+        </div>
+        <div class="p-2 bg-slate-950 rounded-xl font-mono text-slate-300">
+          nama = input("Siapa namamu? ")
+        </div>
+      </div>
+
+      <!-- 4. List -->
+      <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-sky-400 font-mono">4. List & .append()</span>
+          <button onclick="copySnippetToClipboard('ip_list = [\x22192.168.1.1\x22]\nip_list.append(\x22192.168.1.2\x22)')" class="text-[10px] text-slate-400 hover:text-sky-300">Salin</button>
+        </div>
+        <div class="p-2 bg-slate-950 rounded-xl font-mono text-slate-300">
+          ip_list = ["192.168.1.1"]<br>
+          ip_list.append("192.168.1.2")
+        </div>
+      </div>
+
+      <!-- 5. If-Else -->
+      <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-rose-400 font-mono">5. if - elif - else</span>
+          <button onclick="copySnippetToClipboard('if nilai >= 75:\n    print(\x22Lulus\x22)\nelse:\n    print(\x22Remedial\x22)')" class="text-[10px] text-slate-400 hover:text-rose-300">Salin</button>
+        </div>
+        <div class="p-2 bg-slate-950 rounded-xl font-mono text-slate-300">
+          if nilai >= 75:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print("Lulus")<br>
+          else:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print("Remedial")
+        </div>
+      </div>
+
+      <!-- 6. For Loop -->
+      <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-emerald-400 font-mono">6. for loop & range</span>
+          <button onclick="copySnippetToClipboard('for i in range(1, 11):\n    print(i)')" class="text-[10px] text-slate-400 hover:text-emerald-300">Salin</button>
+        </div>
+        <div class="p-2 bg-slate-950 rounded-xl font-mono text-slate-300">
+          for i in range(1, 11):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;print("Ping ke-", i)
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- GRAND CAPSTONE VICTORY MODAL                                              -->
+  <!-- ========================================================================= -->
+  <div id="capstone-victory-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl p-8 max-w-lg w-full border-yellow-500/50 text-center space-y-5 shadow-[0_0_60px_rgba(250,204,21,0.3)]">
+      
+      <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-yellow-500 to-amber-300 text-slate-950 flex items-center justify-center mx-auto trophy-glow shadow-lg">
+        <i data-lucide="trophy" class="w-10 h-10"></i>
+      </div>
+
+      <div>
+        <span class="px-3 py-1 rounded-full text-xs font-black bg-yellow-400 text-slate-950 uppercase tracking-wider">
+          SELAMAT! QUEST SELESAI
+        </span>
+        <h3 class="text-2xl font-black font-arcade text-slate-100 mt-2">
+          KAMU RESMI MENJADI CYBER SENTINEL MASTER! 👑
+        </h3>
+        <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+          Kamu telah menuntaskan seluruh 9 Misi dan berhasil membangun proyek akhir <b>SMK Cyber Sentinel CLI Manager</b> menggunakan Python murni!
+        </p>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-mono text-left space-y-1.5 text-slate-300">
+        <div class="text-cyan-400 font-bold mb-1">Pencapaian Siswa SMK Negeri 1 Bantaeng:</div>
+        <div>✔ Menguasai Output & Formatting Teks</div>
+        <div>✔ Menguasai Variabel, Matematika & Tipe Data</div>
+        <div>✔ Menguasai Input Dinamis & Form Digital</div>
+        <div>✔ Menguasai List & Koleksi Data Jaringan</div>
+        <div>✔ Menguasai Logika Percabangan Gerbang Firewall</div>
+        <div>✔ Menguasai Otomasi Patroli Jaringan dengan Loop</div>
+        <div>✔ Membangun Software CLI Lengkap Mandiri</div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="closeCapstoneVictoryModal()" 
+          class="btn-arcade w-full py-3 rounded-xl bg-gradient-to-r from-yellow-400 via-emerald-400 to-cyan-400 text-slate-950 font-black text-xs shadow-lg">
+          Lanjutkan Eksplorasi Koding ✨
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-notification" class="hidden fixed bottom-6 right-6 z-50 px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg">
+    <i data-lucide="check" class="w-4 h-4"></i>
+    <span>Sintaks berhasil disalin ke clipboard!</span>
+  </div>
+
+  <!-- Script Modules -->
+  <script src="practice.js"></script>
+</body>
+</html>

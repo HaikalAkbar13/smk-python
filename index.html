@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Quest: Introduction to Programming - SMK Negeri 1 Bantaeng</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyber: {
+              dark: '#060913',
+              card: '#0d1426',
+              cyan: '#00f0ff',
+              lime: '#10b981',
+              purple: '#a855f7',
+              orange: '#f97316'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- GSAP (GreenSock Animation Platform) for Morphing Transitions -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Skulpt: Client-Side In-Browser Python Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#060913] text-slate-100 antialiased min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+  <!-- Fluid Cyber-Mesh Canvas & Grid -->
+  <canvas id="fluid-canvas"></canvas>
+  <div class="cyber-grid"></div>
+
+  <!-- Morphing Central Luminous Orb Anchor -->
+  <div id="morph-portal-orb"></div>
+
+  <!-- ========================================================================= -->
+  <!-- TOP NAVBAR & BRANDING                                                     -->
+  <!-- ========================================================================= -->
+  <header class="sticky top-0 z-50 w-full bg-[#060913]/90 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      
+      <!-- Brand & School Info -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 p-0.5 shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+            <i data-lucide="terminal" class="w-5 h-5 text-cyan-400"></i>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-sm sm:text-base tracking-wide bg-gradient-to-r from-cyan-400 via-emerald-300 to-yellow-300 bg-clip-text text-transparent">
+              SMK NEGERI 1 BANTAENG
+            </span>
+            <span class="hidden md:inline-block px-2 py-0.5 text-[10px] font-bold rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+              TJKT & IT CLUB
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 font-mono">Python 101 • Level 1: Introduction to Programming</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher & Utility Actions -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Sound FX Toggle Button -->
+        <button id="btn-sound-toggle" onclick="toggleSoundFx()" title="Toggle Efek Suara Audio"
+          class="w-9 h-9 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 flex items-center justify-center text-cyan-400 transition-all">
+          <i data-lucide="volume-2" class="w-4 h-4 text-cyan-400"></i>
+        </button>
+
+        <!-- Navigation Links -->
+        <div class="flex items-center gap-2">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-xs font-semibold text-cyan-300">
+            <i data-lucide="presentation" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <span>Slide Presentasi</span>
+          </span>
+          <a href="practice.html" 
+            class="btn-arcade px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-950 shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-1.5 transition-all">
+            <i data-lucide="code-2" class="w-3.5 h-3.5 text-slate-950"></i>
+            <span>Buka Arena Praktek 🚀</span>
+          </a>
+        </div>
+
+        <!-- Shortcut Modal Button -->
+        <button onclick="toggleShortcutModal()" title="Bantuan Tombol Keyboard"
+          class="w-9 h-9 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 flex items-center justify-center text-slate-400 hover:text-cyan-400 transition-all">
+          <i data-lucide="keyboard" class="w-4 h-4 text-cyan-400"></i>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button onclick="toggleFullscreen()" title="Fullscreen Layar Penuh (F)"
+          class="w-9 h-9 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 flex items-center justify-center text-cyan-400 transition-all">
+          <i data-lucide="maximize" class="w-4 h-4 text-cyan-400"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Animated Progress Bar for Slides -->
+    <div class="w-full h-1 bg-slate-900 relative overflow-hidden">
+      <div id="slide-progress-bar" class="h-full bg-gradient-to-r from-cyan-400 via-emerald-400 to-purple-500 transition-all duration-300 w-[10%] shadow-[0_0_10px_rgba(0,240,255,0.8)]"></div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN VIEW CONTAINER                                                       -->
+  <!-- ========================================================================= -->
+  <main class="relative z-10 flex-1 flex flex-col justify-center">
+
+    <!-- ======================================================================= -->
+    <!-- MODE 1: PRESENTATION SLIDES (10 COMPREHENSIVE MORPHING SLIDES)          -->
+    <!-- ======================================================================= -->
+    <div id="presentation-container" class="slide-container">
+      
+      <!-- ----------------------------------------------------------------- -->
+      <!-- SLIDE 1: Hero / Animated Rocket Quest Launchpad                   -->
+      <!-- ----------------------------------------------------------------- -->
+      <section id="slide-1" class="slide-content active">
+        <div id="slide-1-card" class="glass-panel rounded-3xl p-8 sm:p-10 text-center max-w-3xl mx-auto border-cyan-500/30 shadow-[0_0_40px_rgba(0,240,255,0.15)] relative overflow-hidden">
+          <div class="absolute -top-24 -right-24 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-semibold mb-4">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+            Workshop Komunitas Programmer SMK Negeri 1 Bantaeng
+          </div>
+
+          <!-- ANIMATED HERO ROCKET WITH SMOKE EXHAUST -->
+          <div class="relative my-2 py-2 flex flex-col items-center justify-center">
+            <div id="hero-rocket-svg" class="rocket-wrapper rocket-idle">
+              <!-- SVG Vector Cyber Rocket -->
+              <svg width="84" height="120" viewBox="0 0 84 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Left Fin -->
+                <path d="M18 70L4 92C2 95 6 98 10 96L24 86" fill="#0284c7" stroke="#00f0ff" stroke-width="2"/>
+                <!-- Right Fin -->
+                <path d="M66 70L80 92C82 95 78 98 74 96L60 86" fill="#0284c7" stroke="#00f0ff" stroke-width="2"/>
+                <!-- Main Body -->
+                <path d="M42 4C28 24 20 54 20 86H64C64 54 56 24 42 4Z" fill="url(#rocketBodyGrad)" stroke="#00f0ff" stroke-width="2.5"/>
+                <!-- Cockpit Window -->
+                <circle cx="42" cy="46" r="11" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5"/>
+                <circle cx="42" cy="46" r="7" fill="#38bdf8" opacity="0.8"/>
+                <!-- Thruster Nozzle -->
+                <rect x="33" y="86" width="18" height="8" rx="2" fill="#334155" stroke="#64748b" stroke-width="1.5"/>
+                <!-- Animated Glowing Thruster Flame -->
+                <polygon id="rocket-flame" class="rocket-flame-flicker" points="35,94 49,94 42,118" fill="url(#flameGrad)" />
+                
+                <!-- Gradients -->
+                <defs>
+                  <linearGradient id="rocketBodyGrad" x1="20" y1="4" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#0f172a"/>
+                    <stop offset="0.5" stop-color="#1e293b"/>
+                    <stop offset="1" stop-color="#0284c7"/>
+                  </linearGradient>
+                  <linearGradient id="flameGrad" x1="42" y1="94" x2="42" y2="118" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#facc15"/>
+                    <stop offset="0.5" stop-color="#f97316"/>
+                    <stop offset="1" stop-color="#ef4444" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            
+            <!-- Dynamic Smoke Puff Spawn Area -->
+            <div id="rocket-smoke-container" class="relative w-48 h-6 flex justify-center"></div>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-black font-arcade tracking-tight leading-tight mb-3">
+            <span class="text-slate-100">PYTHON</span> 
+            <span class="bg-gradient-to-r from-cyan-400 via-emerald-300 to-yellow-300 bg-clip-text text-transparent">QUEST</span>
+          </h1>
+
+          <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mb-6 leading-relaxed">
+            Menjelajahi Fondasi Pemrograman dari Nol! Bikin komputermu berbicara, berpikir, dan merespons dalam hitungan menit.
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button onclick="launchRocketAndStart()" 
+              class="btn-arcade w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 font-extrabold text-base shadow-[0_0_25px_rgba(0,240,255,0.4)] flex items-center justify-center gap-3">
+              <span>Luncurkan Petualangan 🚀</span>
+              <i data-lucide="play" class="w-5 h-5 text-slate-950"></i>
+            </button>
+            <div class="text-xs text-slate-400 flex items-center gap-1.5 font-mono">
+              <kbd class="px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">Spasi</kbd> atau <kbd class="px-2 py-1 bg-slate-800 rounded border border-slate-700 text-slate-300">→</kbd> untuk lanjut
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- SLIDE 2: Cara Kerja Komputer (The IPO Model)                      -->
+      <!-- ----------------------------------------------------------------- -->
+      <section id="slide-2" class="slide-content">
+        <div class="max-w-4xl mx-auto text-center">
+          <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
+            🧠 Mental Model #1
+          </span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-100 mt-2">Bagaimana Komputer Berpikir? (Model IPO)</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl mx-auto">
+            Komputer sebenarnya mesin yang "patuh tapi polos". Ia hanya menjalankan 3 siklus:
+          </p>
+
+          <!-- Interactive IPO Step-by-Step Flow Visualizer -->
+          <div class="mt-6 glass-panel rounded-3xl p-6 sm:p-8 border-cyan-500/30 text-center">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative items-center">
+              
+              <!-- 1. INPUT -->
+              <div id="ipo-card-1" class="p-5 rounded-2xl bg-slate-900/90 border border-yellow-500/40 text-center relative transition-all duration-300">
+                <div class="w-12 h-12 rounded-xl bg-yellow-500/20 text-yellow-400 flex items-center justify-center mx-auto mb-3">
+                  <i data-lucide="keyboard" class="w-6 h-6 text-yellow-400"></i>
+                </div>
+                <h4 class="text-sm font-bold text-yellow-300 uppercase tracking-wider">1. INPUT (Masukan)</h4>
+                <p class="text-xs text-slate-300 mt-1">Data dari ketikan keyboard, klik mouse, sensor, atau jaringan kabel LAN.</p>
+                <div class="mt-3 text-[11px] font-mono text-yellow-300 bg-slate-950 p-1.5 rounded-lg border border-slate-800">
+                  Contoh: input("Nama?")
+                </div>
+              </div>
+
+              <!-- 2. PROCESS -->
+              <div id="ipo-card-2" class="p-5 rounded-2xl bg-slate-900/90 border border-cyan-500/40 text-center relative transition-all duration-300">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center mx-auto mb-3">
+                  <i data-lucide="cpu" class="w-6 h-6 text-cyan-400"></i>
+                </div>
+                <h4 class="text-sm font-bold text-cyan-300 uppercase tracking-wider">2. PROCESS (Proses)</h4>
+                <p class="text-xs text-slate-300 mt-1">CPU mengolah instruksi koding, menghitung data & memeriksa logika if-else.</p>
+                <div class="mt-3 text-[11px] font-mono text-cyan-300 bg-slate-950 p-1.5 rounded-lg border border-slate-800">
+                  Contoh: nama = "Ahmad"
+                </div>
+              </div>
+
+              <!-- 3. OUTPUT -->
+              <div id="ipo-card-3" class="p-5 rounded-2xl bg-slate-900/90 border border-emerald-500/40 text-center relative transition-all duration-300">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-3">
+                  <i data-lucide="monitor" class="w-6 h-6 text-emerald-400"></i>
+                </div>
+                <h4 class="text-sm font-bold text-emerald-300 uppercase tracking-wider">3. OUTPUT (Keluaran)</h4>
+                <p class="text-xs text-slate-300 mt-1">Hasil ditampilkan ke layar monitor, suara speaker, atau aksi router.</p>
+                <div class="mt-3 text-[11px] font-mono text-emerald-300 bg-slate-950 p-1.5 rounded-lg border border-slate-800">
+                  Contoh: print("Halo Ahmad!")
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Flow Connector Indicators -->
+            <div class="hidden md:flex items-center justify-around mt-4 px-12 text-xs font-mono text-slate-400">
+              <div id="ipo-flow-arrow-1" class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 flex items-center gap-1.5 transition-all">
+                <span>Data Masuk</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-cyan-400"></i>
+              </div>
+              <div id="ipo-flow-arrow-2" class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 flex items-center gap-1.5 transition-all">
+                <span>Hasil Dikirim</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-emerald-400"></i>
+              </div>
+            </div>
+
+            <!-- Interactive Trigger CTA -->
+            <div class="mt-6 pt-5 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div id="data-flow-status" class="text-xs font-mono text-slate-300 text-left">
+                💡 Klik tombol di samping untuk mensimulasikan aliran proses koding dari Input ke Output!
+              </div>
+              <button onclick="triggerDataFlow()"
+                class="btn-arcade px-6 py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 via-cyan-500 to-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(0,240,255,0.4)] shrink-0">
+                <i data-lucide="zap" class="w-4 h-4 text-slate-950"></i>
+                <span>⚡ Kirim Sinyal Data</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- SLIDE 3: Kenapa Python di SMK / TJKT? (3 Superpowers)             -->
+      <!-- ----------------------------------------------------------------- -->
+      <section id="slide-3" class="slide-content">
+        <div class="max-w-4xl mx-auto">
+          <div class="text-center mb-5">
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
+              ⚡ Kekuatan Nyata di Dunia IT
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-100 mt-2">Kenapa Harus Python untuk Anak SMK?</h2>
+            <p class="text-xs sm:text-sm text-slate-400">Pilih salah satu bidang di bawah untuk melihat simulasi kekuatannya:</p>
+          </div>
+
+          <!-- 3 Interactive Tabs -->
+          <div class="grid grid-cols-3 gap-2.5 mb-4">
+            <button id="power-tab-network" onclick="selectSuperpower('network')"
+              class="p-3 rounded-2xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 text-left font-semibold text-xs flex items-center gap-2 shadow-sm transition-all">
+              <i data-lucide="network" class="w-4 h-4 text-cyan-400"></i>
+              <span>1. Automasi Jaringan (TJKT)</span>
+            </button>
+            <button id="power-tab-cyber" onclick="selectSuperpower('cyber')"
+              class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 text-slate-400 hover:text-slate-200 text-left font-semibold text-xs flex items-center gap-2 transition-all">
+              <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i>
+              <span>2. Bot & Keamanan Siber</span>
+            </button>
+            <button id="power-tab-ai" onclick="selectSuperpower('ai')"
+              class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 text-slate-400 hover:text-slate-200 text-left font-semibold text-xs flex items-center gap-2 transition-all">
+              <i data-lucide="bot" class="w-4 h-4 text-yellow-400"></i>
+              <span>3. Artificial Intelligence</span>
+            </button>
+          </div>
+
+          <!-- Dynamic Panel Details -->
+          <div class="glass-panel rounded-3xl p-6 border-cyan-500/30">
+            <!-- 1. Network Panel -->
+            <div id="power-panel-network" class="space-y-4">
+              <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                <div>
+                  <h4 class="text-base font-bold text-cyan-300 flex items-center gap-2">
+                    <i data-lucide="router" class="w-5 h-5 text-cyan-400"></i> Automasi Jaringan Komputer (MikroTik / Cisco)
+                  </h4>
+                  <p class="text-xs text-slate-300 mt-1">Daripada mengecek status puluhan router sekolah satu per satu, script Python bisa memeriksa semuanya dalam 1 detik!</p>
+                </div>
+                <button onclick="simulateNetworkPing()" 
+                  class="btn-arcade px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shrink-0">
+                  <i data-lucide="play" class="w-3.5 h-3.5 text-slate-950"></i>
+                  <span>Jalankan Auto-Ping</span>
+                </button>
+              </div>
+
+              <!-- Terminal Ping Simulation -->
+              <div class="terminal-window p-4 bg-slate-950 font-mono text-xs text-slate-300 min-h-[110px]" id="network-ping-logs">
+                <div class="text-slate-500">> python3 auto_ping_router.py</div>
+                <div class="text-emerald-400">✔ 192.168.1.1 (Lab TJKT 1) - ONLINE (Latency 1ms)</div>
+                <div class="text-emerald-400">✔ 192.168.2.1 (Server Utama) - ONLINE (Latency 2ms)</div>
+                <div class="text-yellow-400">⚡ Otomasi Selesai: Semua jaringan sekolah terpantau normal!</div>
+              </div>
+            </div>
+
+            <!-- 2. Cyber Security Panel -->
+            <div id="power-panel-cyber" class="hidden space-y-4">
+              <div>
+                <h4 class="text-base font-bold text-purple-300 flex items-center gap-2">
+                  <i data-lucide="shield-alert" class="w-5 h-5 text-purple-400"></i> Bot Pengawas Server & Port Scanner
+                </h4>
+                <p class="text-xs text-slate-300 mt-1">Python dipakai para praktisi IT Security untuk membuat bot Telegram yang otomatis mengirim notifikasi jika ada penyusup yang mencoba masuk ke jaringan.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-slate-900/90 border border-purple-500/30 text-xs font-mono text-purple-200">
+                <div class="text-emerald-400 font-bold mb-1">🤖 BOT NOTIFIKASI TELEGRAM AKTIF:</div>
+                <div>[08:30] User 'siswa_tkj' berhasil login ke Lab 2 ✅</div>
+                <div>[08:31] Peringatan: Ada percobaan scan port mencurigakan dari IP 10.0.0.50! ⚠️</div>
+              </div>
+            </div>
+
+            <!-- 3. AI Panel -->
+            <div id="power-panel-ai" class="hidden space-y-4">
+              <div>
+                <h4 class="text-base font-bold text-yellow-300 flex items-center gap-2">
+                  <i data-lucide="sparkles" class="w-5 h-5 text-yellow-400"></i> Fondasi Utama Teknologi AI (ChatGPT, Gemini)
+                </h4>
+                <p class="text-xs text-slate-300 mt-1">Hampir 90% model AI, pengenal wajah (*face recognition*), dan analisis data dunia dibuat menggunakan Python karena sintaksnya yang elegan.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-slate-900/90 border border-yellow-500/30 text-xs font-mono text-yellow-200 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-yellow-500/20 flex items-center justify-center text-yellow-400 font-bold shrink-0">AI</div>
+                <div>"Dengan menguasai Python sekarang di SMK, kamu selangkah lebih maju menyambut masa depan teknologi!"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- SLIDE 4: Konsep 1 - print() & Format Teks (Speaker Layar)         -->
+      <!-- ----------------------------------------------------------------- -->
+      <section id="slide-4" class="slide-content">
+        <div class="max-w-3xl mx-auto text-center">
+          <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
+            📢 Konsep Koding #1
+          </span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-100 mt-2">Perintah <code class="text-cyan-400 font-mono">print()</code></h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-lg mx-auto">
+            <b>Speaker Layar:</b> Fungsi bawaan Python untuk menampilkan tulisan, angka, atau simbol ke monitor.
+          </p>
+
+          <!-- Interactive Print Playground on Slide -->
+          <div class="mt-6 glass-panel rounded-3xl p-6 border-cyan-500/30 text-left">
+            
+            <!-- Quick Preset Buttons -->
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <span class="text-xs font-bold text-slate-400">Pilih Contoh Cepat:</span>
+              <button onclick="injectPrintTemplate('hacker')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-cyan-300 border border-slate-700">
+                🛡️ Alert Firewall
+              </button>
+              <button onclick="injectPrintTemplate('banner')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-emerald-300 border border-slate-700">
+                🚀 Banner SMK
+              </button>
+              <button onclick="injectPrintTemplate('custom')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-mono text-yellow-300 border border-slate-700">
+                ✨ Sapaan Siswa
+              </button>
+            </div>
+
+            <!-- Custom Input Box -->
+            <div class="flex flex-col sm:flex-row items-center gap-3 mb-4">
+              <div class="relative flex-1 w-full">
+                <input id="demo-print-input" type="text" value="Halo SMK Negeri 1 Bantaeng! Siap Coding! 🚀" 
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-100 font-mono focus:border-cyan-400 focus:outline-none">
+              </div>
+              <button onclick="demoPrintToScreen()" 
+                class="btn-arcade w-full sm:w-auto px-5 py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shrink-0 shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+                <i data-lucide="send" class="w-4 h-4 text-slate-950"></i>
+                <span>📢 Tembakkan ke Monitor</span>
+              </button>
+            </div>
+
+            <!-- Virtual Monitor Display -->
+            <div class="terminal-window p-4 bg-slate-950 min-h-[90px] flex flex-col justify-center border-slate-800 relative">
+              <div class="text-[10px] text-slate-500 font-mono absolute top-2 right-3 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                <span>MONITOR TERMINAL</span>
+              </div>
+              <div id="demo-print-screen" class="font-mono text-xs sm:text-sm text-slate-200">
+                <span class="text-cyan-400 font-mono">> </span>Halo SMK Negeri 1 Bantaeng! Siap Coding! 🚀
+              </div>
+            </div>
+
+            <!-- Golden Rules -->
+            <div class="mt-3 text-xs text-slate-400 flex items-center gap-2">
+              <i data-lucide="alert-circle" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+              <span><b>Aturan Emas:</b> Teks wajib selalu dibungkus tanda kutip dua <code>"..."</code> atau kutip satu <code>'...'</code>.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- SLIDE 5: Konsep 2 - Variabel & KUIS INTERAKTIF #1                 -->
+      <!-- ----------------------------------------------------------------- -->
+      <section id="slide-5" class="slide-content">
+        <div class="max-w-4xl mx-auto">
+          <div class="text-center mb-4">
+            <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold">
+              📦 Konsep Koding #2 & Kuis
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-100 mt-2">Variabel & Jebakan Tipe Data</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1">Variabel adalah kotak memori berlabel untuk menyimpan Teks (String), Angka (Integer), atau Boolean (True/False).</p>
+          </div>
+
+          <!-- INTERACTIVE AUDIENCE QUIZ #1 CARD -->
+          <div class="glass-panel rounded-3xl p-6 border-purple-500/40 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
+            
+            <div class="flex items-center gap-2 text-xs font-bold text-yellow-400 uppercase tracking-wider mb-2">
+              <i data-lucide="help-circle" class="w-4 h-4 text-yellow-400"></i> Kuis Interaktif 1: Tebak Hasil Kode Ini!
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-3">
+              <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-xs">
+                <div class="text-slate-500 text-[11px] mb-1">Kasus 1 (Angka Murni):</div>
+                <div class="text-cyan-300 font-bold">print(10 + 10)</div>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-xs">
+                <div class="text-slate-500 text-[11px] mb-1">Kasus 2 (Pakai Tanda Kutip):</div>
+                <div class="text-purple-300 font-bold">print("10" + "10")</div>
+              </div>
+            </div>
+
+            <!-- Quiz Voting Options -->
+            <p class="text-xs font-bold text-slate-300 mb-3">Menurut kalian, apa hasil keluaran kedua kode di atas?</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button id="quiz-quiz1-btn-a" onclick="voteGenericQuiz('quiz1', 'A', 'B')"
+                class="w-full p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800/80 border border-slate-700 text-left text-slate-200 transition-all flex items-center justify-between">
+                <div>
+                  <span class="font-bold text-xs text-cyan-400 font-mono">OPSI A:</span>
+                  <div class="text-xs text-slate-300 mt-0.5">Sama-sama menghasilkan angka <b>20</b></div>
+                </div>
+                <i data-lucide="circle" class="w-4 h-4 text-slate-500"></i>
+              </button>
+
+              <button id="quiz-quiz1-btn-b" onclick="voteGenericQuiz('quiz1', 'B', 'B')"
+                class="w-full p-3.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800/80 border border-slate-700 text-left text-slate-200 transition-all flex items-center justify-between">
+                <div>
+                  <span class="font-bold text-xs text-purple-400 font-mono">OPSI B:</span>
+                  <div class="text-xs text-slate-300 mt-0.5">Kasus 1 = <b>20</b>, tapi Kasus 2 = <b>"1010"</b></div>
+                </div>
+                <i data-lucide="circle" class="w-4 h-4 text-slate-500"></i>
+              </button>
+            </div>
+
+            <!-- Quiz Explanation (Revealed on Click) -->
+            <div id="quiz-quiz1-explanation" class="hidden mt-4 p-3.5 rounded-2xl bg-slate-900/95 border border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+              <div class="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-1">
+                <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i> JAWABAN BENAR: OPSI B! 🎉
+              </div>
+              <p class="text-xs text-slate-200 leading-relaxed">
+                • <b>Angka <code>10 + 10</code></b>: Dihitung matematika $\to$ <b>20</b>.<br>
+                • <b>Teks <code>"10" + "10"</code></b>: Dianggap kata yang disambung (*Concatenation*) $\to$ <b>"1010"</b>!
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- SLIDE 6: Konsep 3 - List / Array & KUIS INTERAKTIF #2             -->
+      <!-- ----------------------------------------------------------------- -->
+      <section id="slide-6" class="slide-content">
+        <div class="max-w-4xl mx-auto">
+          <div class="text-center mb-4">
+            <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
+              📑 Konsep Koding #3 & Kuis
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-100 mt-2">List: Kontainer Koleksi Banyak Data</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1">Daripada bikin 100 variabel terpisah, kita simpan daftar IP / Nama dalam satu kontainer <code>[...]</code>.</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            
+            <!-- Left: Array Box & Adder (6 Cols) -->
+            <div class="lg:col-span-6 glass-panel rounded-3xl p-5 border-cyan-500/30 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Isi List di Memori:</span>
+                <span id="array-item-count" class="text-xs font-mono text-cyan-400 font-bold bg-slate-900 px-2 py-0.5 rounded-lg border border-slate-700">
+                  3 Data
+                </span>
+              </div>
+
+              <!-- Visual Items -->
+              <div id="array-items-container" class="flex flex-wrap gap-2 min-h-[44px]">
+                <div class="list-item-capsule px-2.5 py-1 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-mono text-xs flex items-center gap-1.5">
+                  <span class="text-[10px] text-slate-400">[0]</span>
+                  <span class="font-bold">192.168.1.1</span>
+                </div>
+                <div class="list-item-capsule px-2.5 py-1 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-mono text-xs flex items-center gap-1.5">
+                  <span class="text-[10px] text-slate-400">[1]</span>
+                  <span class="font-bold">192.168.1.2</span>
+                </div>
+                <div class="list-item-capsule px-2.5 py-1 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 font-mono text-xs flex items-center gap-1.5">
+                  <span class="text-[10px] text-slate-400">[2]</span>
+                  <span class="font-bold">192.168.1.3</span>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 pt-1">
+                <button onclick="addArrayItem()" 
+                  class="btn-arcade px-3 py-1.5 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-1">
+                  <i data-lucide="plus" class="w-3.5 h-3.5 text-slate-950"></i> Tambah IP
+                </button>
+                <button onclick="clearArrayList()" 
+                  class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs">
+                  Reset
+                </button>
+              </div>
+
+              <!-- Live Python Code -->
+              <div class="terminal-window p-2.5 bg-slate-950 font-mono text-[11px] text-slate-200">
+                <div id="array-code-preview" class="text-slate-100 font-bold break-all">
+                  <span class="text-purple-400">daftar_ip</span> = [<span class="text-emerald-400">"192.168.1.1"</span>, <span class="text-emerald-400">"192.168.1.2"</span>, <span class="text-emerald-400">"192.168.1.3"</span>]
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: INTERACTIVE QUIZ #2 (6 Cols) -->
+            <div class="lg:col-span-6 glass-panel rounded-3xl p-5 border-yellow-500/30 space-y-3">
+              <div class="flex items-center gap-2 text-xs font-bold text-yellow-400 uppercase tracking-wider">
+                <i data-lucide="help-circle" class="w-4 h-4 text-yellow-400"></i> Kuis Interaktif 2: Urutan Index List
+              </div>
+
+              <div class="p-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-xs">
+                <div class="text-slate-400 mb-1">Diberikan kode:</div>
+                <div class="text-cyan-300">siswa = [<span class="text-emerald-400">"Budi"</span>, <span class="text-emerald-400">"Siti"</span>, <span class="text-emerald-400">"Rizky"</span>]</div>
+                <div class="text-yellow-300 mt-1 font-bold">print(siswa[0])</div>
+              </div>
+
+              <p class="text-xs font-bold text-slate-300">Siapa nama yang akan muncul di layar?</p>
+              
+              <div class="grid grid-cols-2 gap-2">
+                <button id="quiz-quiz2-btn-a" onclick="voteGenericQuiz('quiz2', 'A', 'A')"
+                  class="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-left text-xs font-bold transition-all">
+                  <span class="text-cyan-400">A:</span> "Budi"
+                </button>
+                <button id="quiz-quiz2-btn-b" onclick="voteGenericQuiz('quiz2', 'B', 'A')"
+                  class="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-left text-xs font-bold transition-all">
+                  <span class="text-purple-400">B:</span> "Siti"
+                </button>
+              </div>
+
+              <div id="quiz-quiz2-explanation" class="hidden p-2.5 rounded-xl bg-slate-900 border border-emerald-500/50 text-[11px] text-slate-200">
+                <span class="text-emerald-400 font-bold">✔ TEPAT SEKALI! OPSI A: "Budi"</span><br>
+                Di programming, index selalu dimulai dari <b>[0]</b> untuk elemen pertama!
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- SLIDE 7: Konsep 4 - input() & Live Hologram ID Card Generator     -->
+      <!-- ----------------------------------------------------------------- -->
+      <section id="slide-7" class="slide-content">
+        <div class="max-w-4xl mx-auto">
+          <div class="text-center mb-5">
+            <span class="px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 text-xs font-semibold">
+              👂 Konsep Koding #4
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-100 mt-2">Perintah <code class="text-yellow-400 font-mono">input()</code>: Komputer Mendengarkan</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1">Komputer berhenti sejenak, menunggu kamu mengetik di keyboard, lalu menggabungkannya ke dalam program!</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            
+            <!-- Live Form Input (5 Cols) -->
+            <div class="lg:col-span-6 glass-panel rounded-3xl p-6 border-yellow-500/30 space-y-3">
+              <div class="text-xs font-bold text-yellow-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                <i data-lucide="user-plus" class="w-4 h-4 text-yellow-400"></i> Data Siswa Perwakilan:
+              </div>
+
+              <div>
+                <label class="text-[11px] font-mono text-slate-400 block mb-1">Nama Lengkap Siswa:</label>
+                <input id="id-gen-name" type="text" value="Ahmad Al-Fatih" placeholder="Ketik nama salah satu siswa..."
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-100 font-mono focus:border-yellow-400 focus:outline-none">
+              </div>
+
+              <div>
+                <label class="text-[11px] font-mono text-slate-400 block mb-1">Pilih Spesialisasi IT:</label>
+                <select id="id-gen-role" 
+                  class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-100 font-mono focus:border-yellow-400 focus:outline-none">
+                  <option value="Network & Security Engineer">Network & Security Engineer (TJKT)</option>
+                  <option value="Ethical Hacker / Cyber Defender">Ethical Hacker / Cyber Defender</option>
+                  <option value="Python & AI Developer">Python & AI Developer</option>
+                  <option value="Cloud Infrastructure Specialist">Cloud Infrastructure Specialist</option>
+                </select>
+              </div>
+
+              <button onclick="generateStudentIdCard()"
+                class="btn-arcade w-full py-2.5 rounded-xl bg-gradient-to-r from-yellow-500 via-orange-500 to-cyan-400 text-slate-950 font-extrabold text-xs flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+                <i data-lucide="sparkles" class="w-4 h-4 text-slate-950"></i>
+                <span>🪪 Cetak Kartu Hologram Live</span>
+              </button>
+
+              <div class="text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-800">
+                Sintaks: <code class="text-yellow-300">nama = input("Siapa namamu? ")</code>
+              </div>
+            </div>
+
+            <!-- Hologram ID Card Result (6 Cols) -->
+            <div class="lg:col-span-6 flex justify-center">
+              <div id="hologram-card-element" class="hologram-card rounded-3xl p-6 max-w-sm w-full shadow-[0_0_30px_rgba(0,240,255,0.2)] transition-all duration-300">
+                <div class="flex items-center justify-between border-b border-cyan-500/30 pb-3 mb-4">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="shield" class="w-5 h-5 text-cyan-400"></i>
+                    <span class="text-xs font-bold tracking-wider text-cyan-300">SMKN 1 BANTAENG</span>
+                  </div>
+                  <span id="hologram-card-id" class="text-[10px] font-mono text-slate-400">SMK-2026</span>
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500 to-purple-500 p-0.5 shrink-0">
+                    <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
+                      <i data-lucide="user" class="w-7 h-7 text-cyan-400"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 id="hologram-card-name" class="text-base font-bold text-slate-100 leading-tight">Ahmad Al-Fatih</h4>
+                    <p id="hologram-card-role" class="text-xs text-yellow-400 font-semibold mt-0.5">Network & Security Engineer</p>
+                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[9px] font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                      LEVEL 1 PROGRAMMER
+                    </span>
+                  </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-800 text-[10px] text-slate-400 font-mono flex items-center justify-between">
+                  <span>STATUS: VERIFIED ✔</span>
+                  <span class="text-cyan-400">PYTHON 101</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- SLIDE 8: Konsep 5 - Logika if-else & KUIS INTERAKTIF #3          -->
+      <!-- ----------------------------------------------------------------- -->
+      <section id="slide-8" class="slide-content">
+        <div class="max-w-4xl mx-auto">
+          <div class="text-center mb-4">
+            <span class="px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold">
+              🚦 Konsep Koding #5 & Kuis
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-100 mt-2">Logika Keputusan: <code class="text-rose-400 font-mono">if - else</code></h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1">Komputer mengecek kondisi: <b>JIKA (if)</b> benar lakukan A, <b>JIKA TIDAK (else)</b> lakukan B.</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            
+            <!-- Left: Interactive Slider Control (6 Cols) -->
+            <div class="lg:col-span-6 glass-panel rounded-3xl p-5 border-rose-500/30 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-300">Geser Nilai Ujian Siswa:</span>
+                <span id="if-else-score-display" class="px-2.5 py-0.5 rounded-lg bg-slate-900 text-yellow-400 font-mono font-bold text-sm border border-slate-700">
+                  80
+                </span>
+              </div>
+
+              <!-- Range Slider -->
+              <input id="if-else-slider" type="range" min="0" max="100" value="80" oninput="updateIfElseSimulation()"
+                class="w-full accent-cyan-400 cursor-pointer">
+
+              <!-- Live Python Code Box -->
+              <div class="terminal-window p-2.5 bg-slate-950 font-mono text-[11px] text-slate-200">
+                <pre id="if-else-code-preview" class="leading-relaxed">
+<span class="text-purple-400">nilai</span> = <span class="text-yellow-400 font-bold">80</span>
+<span class="text-rose-400 font-bold">if</span> <span class="text-purple-400">nilai</span> >= <span class="text-yellow-400">75</span>:
+    <span class="text-cyan-400">status</span> = <span class="text-emerald-400 font-bold bg-emerald-500/20 px-1 rounded">"AKSES DITERIMA / LULUS 🟢"</span>
+<span class="text-rose-400 font-bold">else</span>:
+    <span class="text-cyan-400">status</span> = <span class="text-slate-500">"AKSES DITOLAK / REMEDIAL 🔴"</span>
+</pre>
+              </div>
+
+              <div id="if-else-status-badge" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 font-bold text-xs flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> GERBANG TERBUKA (AKSES DITERIMA)
+              </div>
+            </div>
+
+            <!-- Right: INTERACTIVE QUIZ #3 (6 Cols) -->
+            <div class="lg:col-span-6 glass-panel rounded-3xl p-5 border-rose-500/30 space-y-3">
+              <div class="flex items-center gap-2 text-xs font-bold text-yellow-400 uppercase tracking-wider">
+                <i data-lucide="help-circle" class="w-4 h-4 text-yellow-400"></i> Kuis Interaktif 3: Logika Syarat
+              </div>
+
+              <div class="p-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-xs">
+                <div class="text-purple-400">umur = <span class="text-yellow-300">16</span></div>
+                <div class="text-rose-400 font-bold">if <span class="text-slate-100">umur >= 17</span>:</div>
+                <div class="text-emerald-400 pl-4">print("Boleh Buat SIM")</div>
+                <div class="text-rose-400 font-bold">else:</div>
+                <div class="text-yellow-300 pl-4">print("Belum Cukup Umur")</div>
+              </div>
+
+              <p class="text-xs font-bold text-slate-300">Apa teks yang akan dicetak komputer?</p>
+              
+              <div class="grid grid-cols-2 gap-2">
+                <button id="quiz-quiz3-btn-a" onclick="voteGenericQuiz('quiz3', 'A', 'B')"
+                  class="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-left text-xs font-bold transition-all">
+                  <span class="text-cyan-400">A:</span> "Boleh Buat SIM"
+                </button>
+                <button id="quiz-quiz3-btn-b" onclick="voteGenericQuiz('quiz3', 'B', 'B')"
+                  class="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-left text-xs font-bold transition-all">
+                  <span class="text-rose-400">B:</span> "Belum Cukup Umur"
+                </button>
+              </div>
+
+              <div id="quiz-quiz3-explanation" class="hidden p-2.5 rounded-xl bg-slate-900 border border-emerald-500/50 text-[11px] text-slate-200">
+                <span class="text-emerald-400 font-bold">✔ BENAR! OPSI B: "Belum Cukup Umur"</span><br>
+                Karena 16 tidak lebih besar atau sama dengan 17, komputer langsung lompat ke blok <b>else</b>!
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- SLIDE 9: Konsep 6 - Perulangan & KUIS INTERAKTIF #4               -->
+      <!-- ----------------------------------------------------------------- -->
+      <section id="slide-9" class="slide-content">
+        <div class="max-w-4xl mx-auto">
+          <div class="text-center mb-4">
+            <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
+              ⚡ Konsep Koding #6 & Kuis
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-100 mt-2">Perulangan (<code class="text-cyan-400 font-mono">for loop</code>): Otomasi Sejati</h2>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1">Komputer menyelesaikan 100 pengulangan tugas dalam 1 detik tanpa pernah lelah!</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            
+            <!-- Left: Loop High-Speed Simulator (6 Cols) -->
+            <div class="lg:col-span-6 glass-panel rounded-3xl p-5 border-cyan-500/30 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-300 uppercase tracking-wider">Simulasi 100x Auto-Ping:</span>
+                <div class="text-right">
+                  <span id="loop-counter-display" class="font-mono text-xl font-black text-cyan-400">0</span>
+                  <span class="text-xs text-slate-400 font-mono"> / 100</span>
+                </div>
+              </div>
+
+              <!-- Loop Progress Bar -->
+              <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-700">
+                <div id="loop-progress-bar" class="h-full bg-gradient-to-r from-cyan-400 via-emerald-400 to-yellow-300 w-0 transition-all duration-75"></div>
+              </div>
+
+              <button onclick="triggerLoopSimulation()"
+                class="btn-arcade w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-emerald-400 to-yellow-300 text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,240,255,0.4)]">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-slate-950"></i>
+                <span>⚡ Jalankan Loop 100x</span>
+              </button>
+
+              <div id="loop-terminal-log" class="terminal-window p-2.5 h-[100px] overflow-y-auto font-mono text-[10px] text-slate-300 space-y-0.5">
+                <div class="text-slate-500 italic">> Klik tombol untuk mulai...</div>
+              </div>
+            </div>
+
+            <!-- Right: INTERACTIVE QUIZ #4 (6 Cols) -->
+            <div class="lg:col-span-6 glass-panel rounded-3xl p-5 border-cyan-500/30 space-y-3">
+              <div class="flex items-center gap-2 text-xs font-bold text-yellow-400 uppercase tracking-wider">
+                <i data-lucide="help-circle" class="w-4 h-4 text-yellow-400"></i> Kuis Interaktif 4: Jumlah Loop
+              </div>
+
+              <div class="p-3 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-xs">
+                <div class="text-purple-400 font-bold">for <span class="text-slate-100">i</span> in <span class="text-cyan-400">range</span>(5):</div>
+                <div class="text-emerald-400 pl-4">print("SMK BISA!")</div>
+              </div>
+
+              <p class="text-xs font-bold text-slate-300">Berapa kali kata "SMK BISA!" akan dicetak ke layar?</p>
+              
+              <div class="grid grid-cols-2 gap-2">
+                <button id="quiz-quiz4-btn-a" onclick="voteGenericQuiz('quiz4', 'A', 'A')"
+                  class="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-left text-xs font-bold transition-all">
+                  <span class="text-cyan-400">A:</span> 5 Kali
+                </button>
+                <button id="quiz-quiz4-btn-b" onclick="voteGenericQuiz('quiz4', 'B', 'A')"
+                  class="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-left text-xs font-bold transition-all">
+                  <span class="text-purple-400">B:</span> 4 Kali
+                </button>
+              </div>
+
+              <div id="quiz-quiz4-explanation" class="hidden p-2.5 rounded-xl bg-slate-900 border border-emerald-500/50 text-[11px] text-slate-200">
+                <span class="text-emerald-400 font-bold">✔ TEPAT! OPSI A: 5 Kali!</span><br>
+                Fungsi <code>range(5)</code> menghasilkan urutan angka <b>0, 1, 2, 3, 4</b> (total 5 kali perulangan).
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------------- -->
+      <!-- SLIDE 10: Mentalitas Debugging & Grand Launchpad                  -->
+      <!-- ----------------------------------------------------------------- -->
+      <section id="slide-10" class="slide-content">
+        <div class="glass-panel rounded-3xl p-8 sm:p-12 text-center max-w-4xl mx-auto border-emerald-500/40 shadow-[0_0_50px_rgba(16,185,129,0.25)]">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-8 text-left">
+            <!-- 3D Flip Card Debugging Mindset (Robust OnClick) -->
+            <div class="flip-card h-48 cursor-pointer" onclick="toggleCardFlip(this)">
+              <div class="flip-card-inner">
+                <div class="flip-card-front glass-panel rounded-2xl p-5 border-yellow-500/40 flex flex-col justify-between">
+                  <div>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">MINDSET JUARA 💡</span>
+                    <h4 class="text-base font-bold text-slate-100 mt-2">"Gimana kalau kodingan saya Error merah-merah?"</h4>
+                  </div>
+                  <div class="text-[11px] text-yellow-300 flex items-center gap-1 font-semibold">
+                    <i data-lucide="mouse-pointer-click" class="w-3.5 h-3.5 text-yellow-400"></i> Klik untuk membuka rahasia
+                  </div>
+                </div>
+                <div class="flip-card-back glass-panel rounded-2xl p-5 border-emerald-500/40 bg-slate-900/95 flex flex-col justify-between">
+                  <div>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">FAKTA DEVELOPER 🚀</span>
+                    <p class="text-xs text-slate-200 mt-2 leading-relaxed">
+                      <b>Error itu bukan tanda kamu gagal</b>, tapi komputer sedang memberi <b>petunjuk GPS di baris mana</b> kamu harus memperbaiki typo!
+                    </p>
+                  </div>
+                  <div class="text-[11px] text-emerald-400 font-bold">Jangan takut salah, nikmati prosesnya! ✨</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6 Pillars Master Checklist -->
+            <div class="glass-panel p-5 rounded-2xl border-slate-700 space-y-2 text-xs font-mono">
+              <div class="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <i data-lucide="check-check" class="w-4 h-4 text-cyan-400"></i> 6 Senjata Utama yang Telah Dikuasai:
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-slate-300">
+                <div class="flex items-center gap-1.5"><span class="text-emerald-400">✔</span> 1. Output (`print`)</div>
+                <div class="flex items-center gap-1.5"><span class="text-emerald-400">✔</span> 2. Variabel & Data</div>
+                <div class="flex items-center gap-1.5"><span class="text-emerald-400">✔</span> 3. List Kontainer</div>
+                <div class="flex items-center gap-1.5"><span class="text-emerald-400">✔</span> 4. Input Keyboard</div>
+                <div class="flex items-center gap-1.5"><span class="text-emerald-400">✔</span> 5. Logika `if-else`</div>
+                <div class="flex items-center gap-1.5"><span class="text-emerald-400">✔</span> 6. Loop Otomasi</div>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="text-2xl sm:text-4xl font-black font-arcade text-slate-100 mb-3">
+            SAATNYA MEMBUKTIKAN KEMAMPUANMU!
+          </h2>
+
+          <p class="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto mb-6">
+            Teori telah tuntas. Buka editor dan rasakan sendiri serunya menciptakan program pertamamu!
+          </p>
+
+          <a href="practice.html"
+            class="btn-arcade inline-flex w-full sm:w-auto px-10 py-5 rounded-2xl bg-gradient-to-r from-emerald-400 via-cyan-400 to-yellow-300 text-slate-950 font-black text-base sm:text-lg shadow-[0_0_35px_rgba(0,240,255,0.6)] items-center justify-center gap-3 mx-auto transition-all">
+            <span>BUKA ARENA PRAKTEK MANDIRI (PRACTICE ARENA 🚀)</span>
+            <i data-lucide="arrow-right" class="w-6 h-6 text-slate-950"></i>
+          </a>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- MODE 2: CODING PLAYGROUND (SPLIT-SCREEN)                                -->
+    <!-- ======================================================================= -->
+    <div id="playground-container" class="hidden max-w-7xl mx-auto px-4 sm:px-6 py-6 w-full h-[calc(100vh-72px)] flex flex-col">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1 min-h-0">
+        
+        <!-- LEFT PANEL: Level Selector & Instructions (4 Cols) -->
+        <div class="lg:col-span-4 flex flex-col gap-4 overflow-hidden">
+          
+          <!-- Level Selector Accordion / List -->
+          <div class="glass-panel rounded-2xl p-4 flex flex-col gap-2 shrink-0">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                <i data-lucide="layers" class="w-3.5 h-3.5 text-cyan-400"></i> Pilihan Misi Latihan
+              </span>
+              <span class="text-[10px] font-mono text-cyan-400">4 Modul Tersedia</span>
+            </div>
+            <div id="level-selector-container" class="space-y-2">
+              <!-- Rendered dynamically by JS -->
+            </div>
+          </div>
+
+          <!-- Mission Guidance & Objective Card -->
+          <div class="glass-panel rounded-2xl p-5 flex-1 flex flex-col justify-between overflow-y-auto border-cyan-500/20">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span id="mission-badge" class="px-2.5 py-1 rounded-full text-xs font-semibold border bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                  Level 1 • Mudah
+                </span>
+                <button onclick="toggleHintModal()" class="text-xs text-yellow-400 hover:text-yellow-300 flex items-center gap-1 font-semibold">
+                  <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-yellow-400"></i> Petunjuk
+                </button>
+              </div>
+
+              <h3 id="mission-title" class="text-lg font-bold text-slate-100 mb-2">Misi 1: Komputer Menyapa Dunia</h3>
+              <p id="mission-desc" class="text-xs text-slate-300 leading-relaxed mb-4">Gunakan perintah print untuk menampilkan teks.</p>
+
+              <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs">
+                <div class="font-bold text-cyan-400 mb-1 flex items-center gap-1.5">
+                  <i data-lucide="target" class="w-3.5 h-3.5 text-cyan-400"></i> Target Misi:
+                </div>
+                <p id="mission-objective" class="text-slate-300">Ubah tulisan di dalam tanda kutip.</p>
+              </div>
+            </div>
+
+            <!-- Back to Slides Button -->
+            <div class="pt-4 mt-4 border-t border-slate-800/80">
+              <button onclick="switchMode('presentation')" class="w-full py-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 text-xs font-semibold text-slate-400 hover:text-slate-200 transition-all flex items-center justify-center gap-2">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-slate-400"></i> Kembali ke Slide Presentasi
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT PANEL: Code Editor & Terminal (8 Cols) -->
+        <div class="lg:col-span-8 flex flex-col gap-4 h-full min-h-0">
+          
+          <!-- CODE EDITOR SECTION -->
+          <div class="glass-panel rounded-2xl flex-1 flex flex-col overflow-hidden border-slate-700/60 min-h-[220px]">
+            <!-- Editor Header & Actions -->
+            <div class="h-12 px-4 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between shrink-0">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-rose-500/80"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                <span class="ml-2 text-xs font-mono text-slate-400 flex items-center gap-1">
+                  <i data-lucide="file-code" class="w-3.5 h-3.5 text-cyan-400"></i> main.py
+                </span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button onclick="resetCurrentCode()" title="Reset Kode ke Semula"
+                  class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 flex items-center gap-1 transition-all">
+                  <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-slate-300"></i> Reset
+                </button>
+                <button id="btn-run-code" onclick="runPythonCode()" 
+                  class="btn-arcade px-4 py-1.5 rounded-lg bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                  <i data-lucide="play" class="w-3.5 h-3.5 text-slate-950"></i>
+                  <span>Jalankan Kode</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Editor Code Area with Line Numbers -->
+            <div class="flex-1 flex overflow-hidden bg-[#090d16]">
+              <div id="line-numbers" class="w-10 py-3 text-right pr-3 select-none text-xs font-mono text-slate-600 bg-slate-950/50 border-r border-slate-800/80 shrink-0">
+                <!-- Numbers rendered by JS -->
+              </div>
+              <textarea id="code-editor" spellcheck="false" 
+                class="code-editor-area flex-1 p-3 text-xs sm:text-sm text-cyan-200 font-mono w-full h-full border-none focus:ring-0"
+                oninput="updateLineNumbers()"></textarea>
+            </div>
+          </div>
+
+          <!-- TERMINAL CONSOLE SECTION -->
+          <div class="terminal-window h-48 sm:h-56 flex flex-col overflow-hidden shrink-0 border-slate-700/80">
+            <!-- Terminal Header -->
+            <div class="h-8 px-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between shrink-0">
+              <span class="text-[11px] font-mono text-slate-400 flex items-center gap-1.5">
+                <i data-lucide="terminal" class="w-3 h-3 text-emerald-400"></i> Terminal Output (Python 3 Web Engine)
+              </span>
+              <button onclick="clearTerminal()" class="text-[10px] font-mono text-slate-500 hover:text-slate-300">
+                Bersihkan
+              </button>
+            </div>
+
+            <!-- Terminal Content Area -->
+            <div id="terminal-scroll-area" class="flex-1 p-3 overflow-y-auto text-xs font-mono bg-slate-950/90 flex flex-col justify-between">
+              <div id="terminal-output" class="space-y-1">
+                <!-- Python outputs rendered here -->
+              </div>
+
+              <!-- Interactive User Input Bar for input() function -->
+              <div id="terminal-interactive-input" class="hidden mt-2 pt-2 border-t border-slate-800/80 flex items-center gap-2">
+                <span id="terminal-prompt-label" class="text-cyan-400 font-mono text-xs font-bold">></span>
+                <input id="terminal-user-input" type="text" 
+                  class="flex-1 bg-transparent text-yellow-300 font-mono text-xs focus:outline-none border-b border-cyan-400/50 pb-0.5"
+                  placeholder="Ketik jawabanmu lalu tekan Enter...">
+                <span class="text-[10px] text-slate-500 font-mono">Tekan Enter ↵</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- FLOATING NAVIGATION HUD FOR SLIDES                                        -->
+  <!-- ========================================================================= -->
+  <nav id="floating-nav-hud" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 z-40">
+    <div class="glass-panel rounded-2xl px-4 py-2 flex items-center gap-4 border-slate-700/80 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+      
+      <!-- Prev Button -->
+      <button id="btn-prev-slide" onclick="prevSlide()" disabled
+        class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 disabled:opacity-40 disabled:hover:bg-slate-800 text-xs font-semibold text-slate-200 flex items-center gap-1 transition-all">
+        <i data-lucide="chevron-left" class="w-4 h-4 text-slate-200"></i>
+        <span>Sebelumnya</span>
+      </button>
+
+      <!-- Dot Indicators -->
+      <div id="slide-dots-container" class="flex items-center gap-1.5">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Slide Counter -->
+      <span id="slide-counter" class="text-xs font-mono text-slate-400 min-w-[85px] text-center">
+        Slide 01 / 10
+      </span>
+
+      <!-- Next Button -->
+      <button id="btn-next-slide" onclick="nextSlide()"
+        class="px-3.5 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold flex items-center gap-1 transition-all shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+        <span>Lanjut</span>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-950"></i>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS                                                                    -->
+  <!-- ========================================================================= -->
+  
+  <!-- 1. Keyboard Shortcut Modal -->
+  <div id="shortcut-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl p-6 max-w-md w-full border-cyan-500/30">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+        <h4 class="text-base font-bold text-slate-100 flex items-center gap-2">
+          <i data-lucide="keyboard" class="w-5 h-5 text-cyan-400"></i> Pintasan Keyboard Presenter
+        </h4>
+        <button onclick="toggleShortcutModal()" class="text-slate-400 hover:text-slate-200">
+          <i data-lucide="x" class="w-5 h-5 text-slate-400"></i>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 border border-slate-800">
+          <span class="text-slate-300">Slide Berikutnya</span>
+          <span class="font-mono text-cyan-400 font-bold bg-slate-800 px-2 py-0.5 rounded">Spasi / →</span>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 border border-slate-800">
+          <span class="text-slate-300">Slide Sebelumnya</span>
+          <span class="font-mono text-cyan-400 font-bold bg-slate-800 px-2 py-0.5 rounded">←</span>
+        </div>
+        <div class="flex items-center justify-between p-2 rounded-xl bg-slate-900/80 border border-slate-800">
+          <span class="text-slate-300">Fullscreen Layar Penuh</span>
+          <span class="font-mono text-cyan-400 font-bold bg-slate-800 px-2 py-0.5 rounded">F</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Hint Modal for Playground -->
+  <div id="hint-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl p-6 max-w-md w-full border-yellow-500/40">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+        <h4 class="text-base font-bold text-yellow-400 flex items-center gap-2">
+          <i data-lucide="lightbulb" class="w-5 h-5 text-yellow-400"></i> Petunjuk Misi
+        </h4>
+        <button onclick="toggleHintModal()" class="text-slate-400 hover:text-slate-200">
+          <i data-lucide="x" class="w-5 h-5 text-slate-400"></i>
+        </button>
+      </div>
+      <p id="mission-hint-text" class="text-xs text-slate-200 leading-relaxed bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
+        Periksa tanda kutip dua dan kurung buka/tutup.
+      </p>
+    </div>
+  </div>
+
+  <!-- Script Modules -->
+  <script src="playground.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
