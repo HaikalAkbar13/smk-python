@@ -1,0 +1,10 @@
+[project]
+name = "smk-python"
+version = "0.2.0"
+description = "Python Quest: Interactive CLI Lab Pembelajaran Fungsi untuk SMK Negeri 1 Bantaeng"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+lab = "lab:main"
